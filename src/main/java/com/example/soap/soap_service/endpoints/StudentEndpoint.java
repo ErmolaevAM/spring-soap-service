@@ -9,6 +9,10 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 @Endpoint
 public class StudentEndpoint {
 
@@ -27,6 +31,28 @@ public class StudentEndpoint {
         return response;
     }
 
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getAllStudentsRequest")
+    @ResponsePayload
+    public GetAllStudentsResponse getAllStudents(@RequestPayload GetAllStudentsRequest request) {
+        GetAllStudentsResponse response = new GetAllStudentsResponse();
+        List<Student> students = new ArrayList<>();
+        studentService.getAll().forEach(studentEntity -> {
+            students.add(Converter.studentEntityToStudent(studentEntity));
+        });
+
+        /*very bad solution, as i think*/
+        Class<?> responseClass = response.getClass();
+        try {
+            Field field = responseClass.getDeclaredField("students");
+            field.setAccessible(true);
+            field.set(response, students);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return response;
+    }
+
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "setStudentsRequest")
     @ResponsePayload
     public SetStudentsResponse setStudent(@RequestPayload SetStudentsRequest request) {
@@ -36,5 +62,8 @@ public class StudentEndpoint {
 
         return response;
     }
+
+
+
 
 }

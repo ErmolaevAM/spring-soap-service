@@ -6,6 +6,8 @@ import com.example.soap.soap_service.dao.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StudentServiceImpl implements StudentService {
 
@@ -20,5 +22,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentEntity get(String id) {
         return repository.findOne(id);
+    }
+
+    @Override
+    public List<StudentEntity> getAll() {
+        return repository.findAll();
     }
 }
