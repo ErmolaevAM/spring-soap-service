@@ -32,15 +32,6 @@ public class StudentEntity {
     public StudentEntity() {
     }
 
-    public StudentEntity(Student student) {
-        this.id = student.getId();
-        this.firstname = student.getFirstname();
-        this.midname = student.getMidname();
-        this.lastname = student.getLastname();
-        this.level = student.getLevel();
-        this.email = student.getEmail();
-    }
-
     public String getId() {
         return id;
     }

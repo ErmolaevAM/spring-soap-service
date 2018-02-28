@@ -1,6 +1,5 @@
 package com.example.soap.soap_service.endpoints;
 
-import com.example.soap.soap_service.dao.entity.StudentEntity;
 import com.example.soap.soap_service.dao.services.StudentService;
 import com.example.soap.soap_service.models.*;
 import com.example.soap.soap_service.utils.Converter;
@@ -22,7 +21,7 @@ public class StudentEndpoint {
     @ResponsePayload
     public GetStudentsResponse getStudent(@RequestPayload GetStudentsRequest request) {
         GetStudentsResponse response = new GetStudentsResponse();
-        Student student = Converter.convert(studentService.get(request.getId()));
+        Student student = Converter.studentEntityToStudent(studentService.get(request.getId()));
         response.setStudent(student);
 
         return response;
@@ -32,8 +31,8 @@ public class StudentEndpoint {
     @ResponsePayload
     public SetStudentsResponse setStudent(@RequestPayload SetStudentsRequest request) {
         SetStudentsResponse response = new SetStudentsResponse();
-        studentService.save(new StudentEntity(request.getStudent()));
-        response.setCode(100);
+        studentService.save(Converter.studentToStudentEntity(request.getStudent()));
+        response.setCode(200);
 
         return response;
     }
